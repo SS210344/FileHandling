@@ -5,6 +5,7 @@ import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Scanner;
+import java.util.ArrayList;
 
 public class Main {
 
@@ -14,7 +15,10 @@ public class Main {
     public static void main(String[] args) {
         CreateFile();
 
-        WriteToFile();
+        ArrayList<String> userList = new ArrayList<>();
+        userList=getUserList();
+
+        WriteToFile(userList);
 
         ReadFile();
 
@@ -23,6 +27,19 @@ public class Main {
         if (userOption.equals("Y")) {
             DeleteFile();
         }
+    }
+
+    public static ArrayList<String> getUserList(){
+        ArrayList<String> userList = new ArrayList<>();
+        System.out.println("number of students");
+        int studentNum = Integer.parseInt(userInput());
+        for (int i = 0; i < studentNum; i++) {
+            System.out.println("student name:");
+            userList.add(userInput());
+        }
+        return userList;
+
+
     }
 
     public static void CreateFile() {
@@ -38,11 +55,16 @@ public class Main {
         }
     }
 
-    public static void WriteToFile() {
+    public static void WriteToFile(ArrayList<String> userList ) {
         try {
-            FileWriter myWriter = new FileWriter(myObj.getName(), true); //True means append to file contents, False means overwrite
+            FileWriter myWriter = new FileWriter(myObj.getName(), false); //True means append to file contents, False means overwrite
             System.out.println("This is the contents of the file:");
-            myWriter.write("Files in Java might be tricky, but it is fun enough!"); // Overwrites everything in the file
+             // Overwrites everything in the file
+            for (int i = 0; i < userList.toArray().length; i++) {
+                String studentName = userList.get(i)+"\n";
+                myWriter.write(studentName);
+
+            }
             myWriter.close();
             System.out.println("Successfully wrote to the file.");
         } catch (IOException e) {
@@ -56,7 +78,10 @@ public class Main {
             Scanner myReader = new Scanner(myObj);
             while (myReader.hasNextLine()) {
                 String data = myReader.nextLine();
-                System.out.println(data);
+                if (checkString(data)){
+                    System.out.println(data);
+                }
+
 
             }
             myReader.close();
@@ -73,6 +98,36 @@ public class Main {
             System.out.println("Failed to delete the file.");
         }
     }
+
+    public static String userInput() {
+        Scanner input = new Scanner(System.in);
+        String UserInput = "";
+
+        try {
+            UserInput = input.next();
+
+        } catch (Exception e) {
+            System.out.println("an error occurred " + e);
+
+        }
+
+        return (UserInput);
+    }
+
+    public static boolean checkString(String data){
+        boolean letter = false;
+        for (int i = 0; i < data.length(); i++) {
+            if((data.charAt(i)== 'e')||(data.charAt(i)== 'u') ){
+                letter=true;
+                break;
+            }
+
+        }
+        return letter;
+
+    }
+
+
 }
 
 
